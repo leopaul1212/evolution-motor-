@@ -7,9 +7,24 @@ class Creature:
         self.structure = structure
         self.neural_network = self.initialisation()
         self.DNA = self.createDNA()
+        self.neural_network_params = self.loadDNA(self.DNA)
+        self.score = None
 
 
 
+    def forward_propagation(self, X):
+        activations = {'A0': X}
+        C = len(self.neural_network_params) // 2  # nombre de couches
+
+        for c in range(1, C):
+            Z = np.dot(self.neural_network_params['W' + str(c)], activations['A' + str(c - 1)]) + self.neural_network_params['b' + str(c)]
+            activations['A' + str(c)] = 1 / (1 + np.exp(-Z))  # sigmoid pour les couches cachées
+
+        # --- dernière couche ---
+        Z = np.dot(self.neural_network_params['W' + str(C)], activations['A' + str(C - 1)]) + self.neural_network_params['b' + str(C)]
+        activations['A' + str(C)] = 1 / (1 + np.exp(-Z))  # sigmoid aussi ici
+
+        return activations
 
     def initialisation(self):
         """Initialise the neural network parameters with random weights and zero biases."""
@@ -87,4 +102,3 @@ class Creature:
         self.neural_network = params
         self.DNA = dna
         return params
-
