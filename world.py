@@ -62,6 +62,8 @@ def mutate_creature(creatures: list[Creature], mutation_rate: float = 0.01, muta
     return new_population
 
 creature = create_creature(20, 4096, 4096)
+
+
 for generation in range (50):
     creature = life(creature, X, Y)
     print(f"Generation {generation}: Best score = {creature[0].score}")
